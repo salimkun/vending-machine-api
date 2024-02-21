@@ -1,0 +1,418 @@
+basePath: /
+definitions:
+  payload.BuyProductRequest:
+    properties:
+      money:
+        items:
+          type: integer
+        type: array
+    type: object
+  payload.CreateProductRequest:
+    properties:
+      name:
+        maxLength: 20
+        minLength: 5
+        type: string
+      price:
+        maximum: 50000
+        minimum: 2000
+        type: integer
+    required:
+    - name
+    type: object
+  payload.ProductResponse:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: integer
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  payload.Response200:
+    properties:
+      data: {}
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  payload.ResponseError:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  payload.TokenRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  payload.UpdateProductRequest:
+    properties:
+      name:
+        maxLength: 20
+        minLength: 5
+        type: string
+      price:
+        maximum: 50000
+        minimum: 2000
+        type: integer
+    type: object
+  payload.UserRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Vending Machine
+  title: Vending Machine
+  version: 0.0.1
+paths:
+  /api/buy/product:
+    post:
+      consumes:
+      - application/json
+      description: Buy Product
+      parameters:
+      - description: update buy product payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/payload.BuyProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/payload.Response200'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+      summary: Buy Product
+      tags:
+      - Product
+  /api/product:
+    get:
+      consumes:
+      - application/json
+      description: Product List
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/payload.Response200'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/payload.ProductResponse'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+      security:
+      - ApiJwtToken: []
+      summary: Get Product
+      tags:
+      - Product
+    post:
+      consumes:
+      - application/json
+      description: Create Product
+      parameters:
+      - description: create product payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/payload.CreateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/payload.Response200'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+      security:
+      - ApiJwtToken: []
+      summary: Create Product
+      tags:
+      - Product
+  /api/product/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Update Product
+      parameters:
+      - description: ID Product
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/payload.Response200'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+      summary: Update Product
+      tags:
+      - Product
+    get:
+      consumes:
+      - application/json
+      description: Product detail
+      parameters:
+      - description: ID Product
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/payload.Response200'
+            - properties:
+                data:
+                  $ref: '#/definitions/payload.ProductResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+      security:
+      - ApiJwtToken: []
+      summary: Get Detai Product
+      tags:
+      - Product
+    patch:
+      consumes:
+      - application/json
+      description: Update Product
+      parameters:
+      - description: ID Product
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: update product payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/payload.UpdateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/payload.Response200'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+      summary: Update Product
+      tags:
+      - Product
+  /api/token:
+    post:
+      consumes:
+      - application/json
+      description: Generate Token User
+      parameters:
+      - description: generate token payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/payload.TokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/payload.Response200'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+      security:
+      - ApiJwtToken: []
+      summary: Generate Token User
+      tags:
+      - Token
+  /api/user/register:
+    post:
+      consumes:
+      - application/json
+      description: Register User
+      parameters:
+      - description: create user payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/payload.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/payload.Response200'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/payload.ResponseError'
+      security:
+      - ApiJwtToken: []
+      summary: Register User
+      tags:
+      - User
+schemes:
+- http
+securityDefinitions:
+  ApiJwtToken:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
